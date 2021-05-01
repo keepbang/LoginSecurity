@@ -4,6 +4,7 @@ spring:
     username: postgres
     password: postgres00
     driver-class-name: org.postgresql.Driver
+    database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
 
   jpa:
     hibernate:
@@ -14,7 +15,7 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: trace
 
 
 
