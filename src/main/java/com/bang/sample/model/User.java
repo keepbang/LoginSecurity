@@ -1,9 +1,6 @@
 package com.bang.sample.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +31,9 @@ public class User implements UserDetails {
     @Column(length = 100, nullable = false)
     private String password;
 
+    @Column(length = 20, unique = true)
+    private String nickname;
+
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
@@ -41,6 +41,13 @@ public class User implements UserDetails {
     @Column(nullable = false, columnDefinition = "SMALLINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean enabled = true;
+
+    @Column(name = "login_token", length = 1000)
+    private String loginToken;
+
+    public void saveToken(String token){
+        this.loginToken = token;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
