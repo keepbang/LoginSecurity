@@ -47,8 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public User login(User user) {
+    public String login(User user) {
         User member = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
         if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
@@ -59,9 +58,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("관리자의 승인이 필요합니다.");
         }
 
-        member.saveToken(jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
-
-        return member;
+        return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
     }
 
 

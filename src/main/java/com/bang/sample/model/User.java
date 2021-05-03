@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @Column(length = 20, unique = true)
     private String nickname;
 
+    @Column(name = "phone_number",length = 13, unique = true)
+    private String phoneNumber;
+
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
@@ -41,13 +44,6 @@ public class User implements UserDetails {
     @Column(nullable = false, columnDefinition = "SMALLINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean enabled = true;
-
-    @Column(name = "login_token", length = 1000)
-    private String loginToken;
-
-    public void saveToken(String token){
-        this.loginToken = token;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
