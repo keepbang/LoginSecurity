@@ -1,4 +1,4 @@
-package com.bang.sample.service.impl;
+package com.bang.sample.service.security;
 
 import com.bang.sample.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

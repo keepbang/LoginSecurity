@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Column(name = "phone_number",length = 13, unique = true)
     private String phoneNumber;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
