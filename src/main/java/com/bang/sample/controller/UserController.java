@@ -1,15 +1,15 @@
 package com.bang.sample.controller;
 
 
+import com.bang.sample.model.ResultStatus;
 import com.bang.sample.model.User;
-import com.bang.sample.repository.UserRepository;
-import com.bang.sample.service.UserService;
+import com.bang.sample.service.security.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 
 
 @RequiredArgsConstructor
@@ -20,14 +20,14 @@ public class UserController {
     private final UserService userService;
 
     // 회원가입
-    @PostMapping("/join")
-    public Long join(@RequestBody User user) {
+    @PostMapping("/join/user")
+    public String join(@RequestBody User user) {
         return userService.save(user, false);
     }
 
     //OWNER 회원가
     @PostMapping("/join/owner")
-    public Long ownerJoin(@RequestBody User user) {
+    public String ownerJoin(@RequestBody User user) {
         return userService.save(user, true);
     }
 
@@ -36,4 +36,17 @@ public class UserController {
     public String login(@RequestBody User user) {
         return userService.login(user);
     }
+
+    //로그아웃은 client에서 token정보를 삭제해주며노
+
+    //회원정보수정
+
+    //회원탈퇴(삭제)
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<ResultStatus> deleteUser(@PathVariable String id){
+        userService.delete(id);
+
+        return new ResponseEntity<>(ResultStatus.SUCCESS, HttpStatus.OK);
+    }
+
 }

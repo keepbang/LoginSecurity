@@ -5,12 +5,14 @@ import com.bang.sample.repository.UserRepository;
 import com.bang.sample.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -23,7 +25,7 @@ public class UserService{
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Long save(User user, boolean isOwner) {
+    public String save(User user, boolean isOwner) {
 
         String role = "";
 
@@ -35,6 +37,7 @@ public class UserService{
 
 
         return userRepository.save(User.builder()
+                .id(UUID.randomUUID().toString())
                 .email(user.getEmail())
                 .nickname(StringUtils.hasText(user.getNickname())?user.getNickname():user.getEmail())
                 .enabled(!isOwner)
@@ -57,5 +60,12 @@ public class UserService{
         return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
     }
 
+
+    @Transactional
+    public void delete(String id){
+        User member = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+        userRepository.delete(member);
+    }
 
 }
